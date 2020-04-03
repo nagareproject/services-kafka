@@ -1,7 +1,7 @@
 # Encoding: utf-8
 
 # --
-# Copyright (c) 2008-2019 Net-ng.
+# Copyright (c) 2008-2020 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -79,7 +79,19 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
         selector=None,
         **config
     ):
-        plugin.Plugin.__init__(self, name, dist, **config)
+        plugin.Plugin.__init__(
+            self, name, dist,
+            topics=topics,
+            key_deserializer=key_deserializer, value_deserializer=value_deserializer,
+            default_offset_commit_callback=default_offset_commit_callback,
+            partition_assignment_strategy=partition_assignment_strategy,
+            consumer_timeout_ms=consumer_timeout_ms,
+            socket_options=socket_options,
+            ssl_context=ssl_context,
+            metric_reporters=metric_reporters,
+            selector=selector,
+            **config
+        )
 
         if key_deserializer:
             key_deserializer, _ = reference.load_object(key_deserializer)
@@ -181,7 +193,16 @@ class KafkaProducer(plugin.Plugin, kafka.KafkaProducer):
         selector=None,
         **config
     ):
-        plugin.Plugin.__init__(self, name, dist, **config)
+        plugin.Plugin.__init__(
+            self, name, dist,
+            key_serializer=key_serializer, value_serializer=value_serializer,
+            partitioner=partitioner,
+            socket_options=socket_options,
+            ssl_context=ssl_context,
+            metric_reporters=metric_reporters,
+            selector=selector,
+            **config
+        )
 
         if key_serializer:
             key_serializer, _ = reference.load_object(key_serializer)

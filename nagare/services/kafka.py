@@ -45,14 +45,14 @@ def create_consumer_config_spec():
             ('api_version', 'int_list'),
         )},
 
-        topics='list(default=list())',
-        bootstrap_servers='list(default=list("localhost"))',
+        topics='string_list(default=list())',
+        bootstrap_servers='string_list(default=list("localhost"))',
         key_deserializer='string(default=None)',
         value_deserializer='string(default=None)',
         default_offset_commit_callback='string(default=None)',
-        partition_assignment_strategy='list(default=None)',
+        partition_assignment_strategy='string_list(default=None)',
         consumer_timeout_ms='integer(default=None)',
-        metric_reporters='list(default=None)',
+        metric_reporters='string_list(default=None)',
         selector='string(default=None)'
     ))
 
@@ -171,7 +171,7 @@ def create_producer_config_spec():
         key_serializer='string(default=None)',
         value_serializer='string(default=None)',
         partitioner='string(default=None)',
-        metric_reporters='list(default=None)',
+        metric_reporters='string_list(default=None)',
         selector='string(default=None)'
     ))
 

@@ -94,13 +94,13 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
         )
 
         if key_deserializer:
-            key_deserializer, _ = reference.load_object(key_deserializer)
+            key_deserializer, _ = reference.load_object(key_deserializer)[0]
 
         if value_deserializer:
-            value_deserializer, _ = reference.load_object(value_deserializer)
+            value_deserializer, _ = reference.load_object(value_deserializer)[0]
 
         if default_offset_commit_callback:
-            default_offset_commit_callback, _ = reference.load_object(default_offset_commit_callback)
+            default_offset_commit_callback, _ = reference.load_object(default_offset_commit_callback)[0]
         else:
             default_offset_commit_callback = kafka.KafkaConsumer.DEFAULT_CONFIG['default_offset_commit_callback']
 
@@ -123,7 +123,7 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
             metric_reporters = kafka.KafkaConsumer.DEFAULT_CONFIG['metric_reporters']
 
         if selector is not None:
-            selector, _ = reference.load_object(selector)
+            selector, _ = reference.load_object(selector)[0]
         else:
             selector = kafka.KafkaConsumer.DEFAULT_CONFIG['selector']
 
@@ -205,13 +205,13 @@ class KafkaProducer(plugin.Plugin, kafka.KafkaProducer):
         )
 
         if key_serializer:
-            key_serializer, _ = reference.load_object(key_serializer)
+            key_serializer, _ = reference.load_object(key_serializer)[0]
 
         if value_serializer:
-            value_serializer, _ = reference.load_object(value_serializer)
+            value_serializer, _ = reference.load_object(value_serializer)[0]
 
         if partitioner is not None:
-            partitioner, _ = reference.load_object(partitioner)
+            partitioner, _ = reference.load_object(partitioner)[0]
         else:
             partitioner = kafka.KafkaProducer.DEFAULT_CONFIG['partitioner']
 
@@ -224,7 +224,7 @@ class KafkaProducer(plugin.Plugin, kafka.KafkaProducer):
             metric_reporters = kafka.KafkaProducer.DEFAULT_CONFIG['metric_reporters']
 
         if selector is not None:
-            selector, _ = reference.load_object(selector)
+            selector, _ = reference.load_object(selector)[0]
         else:
             selector = kafka.KafkaProducer.DEFAULT_CONFIG['selector']
 

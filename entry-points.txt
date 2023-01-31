@@ -1,0 +1,10 @@
+[nagare.commands]
+kafka = nagare.admin.kafka:Commands
+
+[nagare.commands.kafka]
+receive = nagare.admin.kafka:Receive
+send = nagare.admin.kafka:Send
+
+[nagare.services]
+kafka_consumer = nagare.services.kafka:KafkaConsumer
+kafka_producer = nagare.services.kafka:KafkaProducer

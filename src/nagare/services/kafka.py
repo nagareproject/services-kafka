@@ -1,7 +1,7 @@
 # Encoding: utf-8
 
 # --
-# Copyright (c) 2008-2022 Net-ng.
+# Copyright (c) 2008-2023 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -9,14 +9,13 @@
 # this distribution.
 # --
 
-"""Provides the classes to interact with Kafka"""
+"""Provides the classes to interact with Kafka."""
 
 from __future__ import absolute_import
 
 import kafka
-
-from nagare.services import plugin
 from nagare.server import reference
+from nagare.services import plugin
 
 
 def create_consumer_config_spec():
@@ -28,48 +27,54 @@ def create_consumer_config_spec():
         if type(default) in TYPE_TRANSLATION
     }
 
-    config_spec.update(dict(
-        {name: '{}(default={})'.format(type_, kafka.KafkaConsumer.DEFAULT_CONFIG[name]) for name, type_ in (
-            ('group_id', 'string'),
-            ('receive_buffer_bytes', 'integer'),
-            ('send_buffer_bytes', 'integer'),
-            ('ssl_cafile', 'string'),
-            ('ssl_certfile', 'string'),
-            ('ssl_keyfile', 'string'),
-            ('ssl_crlfile', 'string'),
-            ('ssl_password', 'string'),
-            ('sasl_mechanism', 'string'),
-            ('sasl_plain_username', 'string'),
-            ('sasl_plain_password', 'string'),
-            ('sasl_kerberos_domain_name', 'string'),
-            ('api_version', 'int_list'),
-        )},
-
-        topics='string_list(default=list())',
-        bootstrap_servers='string_list(default=list("localhost"))',
-        key_deserializer='string(default=None)',
-        value_deserializer='string(default=None)',
-        default_offset_commit_callback='string(default=None)',
-        partition_assignment_strategy='string_list(default=None)',
-        consumer_timeout_ms='integer(default=None)',
-        metric_reporters='string_list(default=None)',
-        selector='string(default=None)'
-    ))
+    config_spec.update(
+        dict(
+            {
+                name: '{}(default={})'.format(type_, kafka.KafkaConsumer.DEFAULT_CONFIG[name])
+                for name, type_ in (
+                    ('group_id', 'string'),
+                    ('receive_buffer_bytes', 'integer'),
+                    ('send_buffer_bytes', 'integer'),
+                    ('ssl_cafile', 'string'),
+                    ('ssl_certfile', 'string'),
+                    ('ssl_keyfile', 'string'),
+                    ('ssl_crlfile', 'string'),
+                    ('ssl_password', 'string'),
+                    ('sasl_mechanism', 'string'),
+                    ('sasl_plain_username', 'string'),
+                    ('sasl_plain_password', 'string'),
+                    ('sasl_kerberos_domain_name', 'string'),
+                    ('api_version', 'int_list'),
+                )
+            },
+            topics='string_list(default=list())',
+            bootstrap_servers='string_list(default=list("localhost"))',
+            key_deserializer='string(default=None)',
+            value_deserializer='string(default=None)',
+            default_offset_commit_callback='string(default=None)',
+            partition_assignment_strategy='string_list(default=None)',
+            consumer_timeout_ms='integer(default=None)',
+            metric_reporters='string_list(default=None)',
+            selector='string(default=None)',
+        )
+    )
 
     return config_spec
 
 
 class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
-    """The Kafka client service
-    """
+    """The Kafka client service."""
+
     LOAD_PRIORITY = 10
     CONFIG_SPEC = dict(plugin.Plugin.CONFIG_SPEC, **create_consumer_config_spec())
 
     def __init__(
         self,
-        name, dist,
+        name,
+        dist,
         topics=(),
-        key_deserializer=None, value_deserializer=None,
+        key_deserializer=None,
+        value_deserializer=None,
         default_offset_commit_callback=None,
         partition_assignment_strategy=None,
         consumer_timeout_ms=None,
@@ -77,12 +82,15 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
         ssl_context=None,
         metric_reporters=None,
         selector=None,
-        **config
+        **config,
     ):
         plugin.Plugin.__init__(
-            self, name, dist,
+            self,
+            name,
+            dist,
             topics=topics,
-            key_deserializer=key_deserializer, value_deserializer=value_deserializer,
+            key_deserializer=key_deserializer,
+            value_deserializer=value_deserializer,
             default_offset_commit_callback=default_offset_commit_callback,
             partition_assignment_strategy=partition_assignment_strategy,
             consumer_timeout_ms=consumer_timeout_ms,
@@ -90,7 +98,7 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
             ssl_context=ssl_context,
             metric_reporters=metric_reporters,
             selector=selector,
-            **config
+            **config,
         )
 
         if key_deserializer:
@@ -128,8 +136,10 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
             selector = kafka.KafkaConsumer.DEFAULT_CONFIG['selector']
 
         kafka.KafkaConsumer.__init__(
-            self, *topics,
-            key_deserializer=key_deserializer, value_deserializer=value_deserializer,
+            self,
+            *topics,
+            key_deserializer=key_deserializer,
+            value_deserializer=value_deserializer,
             default_offset_commit_callback=default_offset_commit_callback,
             partition_assignment_strategy=partition_assignment_strategy,
             consumer_timeout_ms=consumer_timeout_ms,
@@ -137,7 +147,7 @@ class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
             ssl_context=ssl_context,
             metric_reporters=metric_reporters,
             selector=selector,
-            **config
+            **config,
         )
 
 
@@ -150,30 +160,34 @@ def create_producer_config_spec():
         if type(default) in TYPE_TRANSLATION
     }
 
-    config_spec.update(dict(
-        {name: '{}(default={})'.format(type_, kafka.KafkaProducer.DEFAULT_CONFIG[name]) for name, type_ in (
-            ('client_id', 'string'),
-            ('compression_type', 'string'),
-            ('receive_buffer_bytes', 'integer'),
-            ('send_buffer_bytes', 'integer'),
-            ('ssl_cafile', 'string'),
-            ('ssl_certfile', 'string'),
-            ('ssl_keyfile', 'string'),
-            ('ssl_crlfile', 'string'),
-            ('ssl_password', 'string'),
-            ('api_version', 'int_list'),
-            ('sasl_mechanism', 'string'),
-            ('sasl_plain_username', 'string'),
-            ('sasl_plain_password', 'string'),
-            ('sasl_kerberos_domain_name', 'string')
-        )},
-
-        key_serializer='string(default=None)',
-        value_serializer='string(default=None)',
-        partitioner='string(default=None)',
-        metric_reporters='string_list(default=None)',
-        selector='string(default=None)'
-    ))
+    config_spec.update(
+        dict(
+            {
+                name: '{}(default={})'.format(type_, kafka.KafkaProducer.DEFAULT_CONFIG[name])
+                for name, type_ in (
+                    ('client_id', 'string'),
+                    ('compression_type', 'string'),
+                    ('receive_buffer_bytes', 'integer'),
+                    ('send_buffer_bytes', 'integer'),
+                    ('ssl_cafile', 'string'),
+                    ('ssl_certfile', 'string'),
+                    ('ssl_keyfile', 'string'),
+                    ('ssl_crlfile', 'string'),
+                    ('ssl_password', 'string'),
+                    ('api_version', 'int_list'),
+                    ('sasl_mechanism', 'string'),
+                    ('sasl_plain_username', 'string'),
+                    ('sasl_plain_password', 'string'),
+                    ('sasl_kerberos_domain_name', 'string'),
+                )
+            },
+            key_serializer='string(default=None)',
+            value_serializer='string(default=None)',
+            partitioner='string(default=None)',
+            metric_reporters='string_list(default=None)',
+            selector='string(default=None)',
+        )
+    )
 
     return config_spec
 
@@ -184,24 +198,29 @@ class KafkaProducer(plugin.Plugin, kafka.KafkaProducer):
 
     def __init__(
         self,
-        name, dist,
-        key_serializer=None, value_serializer=None,
+        name,
+        dist,
+        key_serializer=None,
+        value_serializer=None,
         partitioner=None,
         socket_options=None,
         ssl_context=None,
         metric_reporters=None,
         selector=None,
-        **config
+        **config,
     ):
         plugin.Plugin.__init__(
-            self, name, dist,
-            key_serializer=key_serializer, value_serializer=value_serializer,
+            self,
+            name,
+            dist,
+            key_serializer=key_serializer,
+            value_serializer=value_serializer,
             partitioner=partitioner,
             socket_options=socket_options,
             ssl_context=ssl_context,
             metric_reporters=metric_reporters,
             selector=selector,
-            **config
+            **config,
         )
 
         if key_serializer:
@@ -230,11 +249,12 @@ class KafkaProducer(plugin.Plugin, kafka.KafkaProducer):
 
         kafka.KafkaProducer.__init__(
             self,
-            key_serializer=key_serializer, value_serializer=value_serializer,
+            key_serializer=key_serializer,
+            value_serializer=value_serializer,
             partitioner=partitioner,
             socket_options=socket_options,
             ssl_context=ssl_context,
             metric_reporters=metric_reporters,
             selector=selector,
-            **config
+            **config,
         )

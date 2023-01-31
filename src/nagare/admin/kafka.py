@@ -1,5 +1,5 @@
 # --
-# Copyright (c) 2008-2022 Net-ng.
+# Copyright (c) 2008-2023 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -79,10 +79,7 @@ class Send(Command):
     def set_arguments(self, parser):
         parser.add_argument('topic', help='kafka topic')
         parser.add_argument('-k', '--key', help='message key')
-        parser.add_argument(
-            '-l', '--loop', action='store_true',
-            help='infinite loop sending <data> each 2 secondes'
-        )
+        parser.add_argument('-l', '--loop', action='store_true', help='infinite loop sending <data> each 2 secondes')
 
         parser.add_argument('value', help='string to send')
 
@@ -90,7 +87,7 @@ class Send(Command):
 
     @staticmethod
     def run(_, producer, loop, topic, key, value):
-        print("Sending on topic `{}`".format(topic))
+        print('Sending on topic `{}`'.format(topic))
 
         if key is not None:
             key = key.encode('utf-8')

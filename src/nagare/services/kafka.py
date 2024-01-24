@@ -1,7 +1,7 @@
 # Encoding: utf-8
 
 # --
-# Copyright (c) 2008-2023 Net-ng.
+# Copyright (c) 2008-2024 Net-ng.
 # All rights reserved.
 #
 # This software is licensed under the BSD License, as described in
@@ -14,6 +14,7 @@
 from __future__ import absolute_import
 
 import kafka
+
 from nagare.server import reference
 from nagare.services import plugin
 
@@ -65,7 +66,6 @@ def create_consumer_config_spec():
 class KafkaConsumer(plugin.Plugin, kafka.KafkaConsumer):
     """The Kafka client service."""
 
-    LOAD_PRIORITY = 10
     CONFIG_SPEC = dict(plugin.Plugin.CONFIG_SPEC, **create_consumer_config_spec())
 
     def __init__(
@@ -193,7 +193,6 @@ def create_producer_config_spec():
 
 
 class KafkaProducer(plugin.Plugin, kafka.KafkaProducer):
-    LOAD_PRIORITY = 10
     CONFIG_SPEC = dict(plugin.Plugin.CONFIG_SPEC, **create_producer_config_spec())
 
     def __init__(
